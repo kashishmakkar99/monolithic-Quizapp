@@ -26,4 +26,10 @@ public class QuestionService {
         qlist=questionDao.findByCategory(category);
         return qlist;
     }
+
+    public String addQuestion(Question question) {
+        Question q=new Question();
+        q=questionDao.save(question);
+        return q.getId()!=null?"success":"failure";
+    }
 }
