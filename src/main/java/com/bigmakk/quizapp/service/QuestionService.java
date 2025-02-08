@@ -3,6 +3,8 @@ package com.bigmakk.quizapp.service;
 import com.bigmakk.quizapp.dao.QuestionDao;
 import com.bigmakk.quizapp.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,22 +16,39 @@ public class QuestionService {
     @Autowired
     QuestionDao questionDao;
 
-    public List<Question> getAllQuestions() {
-        List<Question>qlist=new ArrayList<>();
-        qlist=questionDao.findAll();
-        return qlist;
+    public ResponseEntity<List<Question>> getAllQuestions(){
+        try{
+            List<Question>qlist=new ArrayList<>();
+            qlist=questionDao.findAll();
+            return new ResponseEntity<>(qlist, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(),HttpStatus.BAD_REQUEST);
     }
 
-    public List<Question> getQuestionsByCategory(String category) {
+    public ResponseEntity<List<Question>> getQuestionsByCategory(String category) {
 
-        List<Question>qlist=new ArrayList<>();
-        qlist=questionDao.findByCategory(category);
-        return qlist;
+        try{
+            List<Question>qlist=new ArrayList<>();
+            qlist=questionDao.findByCategory(category);;
+            return new ResponseEntity<>(qlist, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(),HttpStatus.BAD_REQUEST);
+
     }
 
-    public String addQuestion(Question question) {
-        Question q=new Question();
-        q=questionDao.save(question);
-        return q.getId()!=null?"success":"failure";
+    public ResponseEntity<String> addQuestion(Question question) {
+        try{
+          questionDao.save(question);
+          return new ResponseEntity<>("Success",HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>("failure",HttpStatus.BAD_REQUEST);
     }
 }

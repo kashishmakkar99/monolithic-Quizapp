@@ -1,21 +1,23 @@
 package com.bigmakk.quizapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 
 @Entity(name = "question")
 public class Question {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "question_generator")
+    @SequenceGenerator(name = "question_generator",sequenceName = "question_seq",allocationSize = 1)
     private Integer id;
 
+    @NonNull
     private String category;
+    @NonNull
     private String difficulty;
+    @NonNull
     private String description;
 
     @Override
@@ -105,9 +107,12 @@ public class Question {
         this.correctAnswer = correctAnswer;
     }
 
+    @NonNull
     private String option1;
+    @NonNull
     private String option2;
     private String option3;
     private String option4;
+    @NonNull
     private String correctAnswer;
 }

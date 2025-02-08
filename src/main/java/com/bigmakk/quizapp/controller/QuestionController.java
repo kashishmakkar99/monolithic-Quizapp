@@ -4,6 +4,9 @@ package com.bigmakk.quizapp.controller;
 import com.bigmakk.quizapp.model.Question;
 import com.bigmakk.quizapp.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,23 +19,21 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
     @GetMapping("allQuestions")
-    public List<Question> getAllQuestions(){
-        List<Question> qlist=new ArrayList<>();
-        qlist=questionService.getAllQuestions();
-        return qlist;
+    public ResponseEntity<List<Question>> getAllQuestions(){
+
+        return  questionService.getAllQuestions();
     }
 
 
 
     @GetMapping("category/{category}")
-    public List<Question>getQuestionsByCategory(@PathVariable String category){
-        List<Question> qlist=new ArrayList<>();
-        qlist=questionService.getQuestionsByCategory(category);
-        return qlist;
+    public ResponseEntity<List<Question>>getQuestionsByCategory(@PathVariable String category){
+
+        return questionService.getQuestionsByCategory(category);
     }
 
     @PostMapping("add")
-    public String  addQuestion(@RequestBody Question question){
+    public ResponseEntity<String>  addQuestion(@RequestBody Question question){
         return questionService.addQuestion(question);
     }
 }
