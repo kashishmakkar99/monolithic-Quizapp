@@ -5,6 +5,7 @@ import com.bigmakk.quizapp.dao.QuizDao;
 import com.bigmakk.quizapp.model.Question;
 import com.bigmakk.quizapp.model.QuestionWrapper;
 import com.bigmakk.quizapp.model.Quiz;
+import com.bigmakk.quizapp.model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -47,5 +48,21 @@ public class QuizService {
          questionsForUser.add(qw);
      }
      return new ResponseEntity<>(questionsForUser,HttpStatus.OK);
+    }
+
+    public ResponseEntity<Integer> calculateResult(Integer id, List<Response> responses) {
+        Quiz quiz=quizDao.findById(id).get();
+        List<Question> questions=quiz.getQuestions();
+        int score=0;
+        int i=0;
+        for(Response response:responses){
+            if(response.getAns().equals(questions.get(i).getCorrectAnswer()))
+                score++;
+
+            i++;
+
+        }
+
+        return new ResponseEntity<>(score,HttpStatus.OK);
     }
 }
